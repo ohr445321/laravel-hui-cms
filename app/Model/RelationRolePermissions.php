@@ -1,6 +1,6 @@
 <?php
 /**
- * 功能：用户角色模型
+ * 功能：用户角色-权限关系模型
  * author: ouhanrong
  * User: ohr445321
  * Date: 2017/2/23
@@ -12,13 +12,13 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Role extends Model
+class RelationRolePermissions extends Model
 {
     //使用软连接
     use SoftDeletes;
 
     //关联到的数据库表
-    protected $table = 'roles';
+    protected $table = 'relation_role_permissions';
 
     /***************************************常用查询条件**************************/
 
@@ -34,23 +34,7 @@ class Role extends Model
         return $query->where('id', $id);
     }
 
-    /**
-     * 功能：获取记录创建时间
-     * author: ouhanrong
-     * @param $value
-     * @return false|string
-     */
-    public function getCreateTimeAttribute($value)
-    {
-        return date('Y-m-d H:i', strtotime($value));
-    }
-
     /***************************************关联关系**************************/
-
-    public function relationRolePermissions()
-    {
-        return $this->belongsToMany(__NAMESPACE__.'\Permissions', 'relation_role_permissions', 'role_id', 'permissions_id');
-    }
 
 
 }

@@ -34,6 +34,10 @@ class PublicBusiness extends BusinessBase
         if (empty($user_data)) {
             throw new JsonException(20007);
         }
+        //判断用户状态是否被禁用
+        if ($user_data['is_disable'] == 1) {
+            throw new JsonException(20010);
+        }
         //判断密码是否正确
         if (!Helper::checkEncryptPwd($user_data->password, $data['password'], $user_data->salt)) {
             throw new JsonException(20008);

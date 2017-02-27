@@ -8,7 +8,7 @@
         <form action="{{ url('/admin/user/') }}" method="get" class="form form-horizontal">
             <div class="text-l">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                <input type="text" class="input-text" style="width:350px" placeholder="输入ID、用户名、邮箱" name="keyword" value="@if(!empty($data['get_data']['keyword'])) $data['get_data']['keyword'] @endif">
+                <input type="text" class="input-text" style="width:350px" placeholder="输入ID、用户名、邮箱" name="keyword" value="@if(!empty($data['get_data']['keyword'])){{ $data['get_data']['keyword'] }}@endif">
                 <button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
                 <a href="javascript:;" href-url="{{ url('/admin/user/create') }}" class="btn btn-primary radius add-user"><i class="Hui-iconfont">&#xe600;</i> 添加</a>
             </div>
@@ -38,9 +38,9 @@
                                 <td>{{ $value->email }}</td>
                                 <td>
                                     @if($value->is_disable == 0)
-                                        启用
+                                        <span class="label label-success radius">已启用</span>
                                     @else
-                                        禁用
+                                        <span class="label label-danger radius">已禁用</span>
                                     @endif
                                 </td>
                                 <td>{{ $value->create_time }}</td>

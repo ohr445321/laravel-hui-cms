@@ -10,6 +10,9 @@
                 <ul>
                     <li><a data-href="{{ url('/admin/permissions/') }}" data-title="菜单权限管理" href="javascript:void(0)">菜单权限管理</a></li>
                 </ul>
+                <ul>
+                    <li><a data-href="{{ url('/admin/role/') }}" data-title="用户角色管理" href="javascript:void(0)">用户角色管理</a></li>
+                </ul>
             </dd>
         </dl>
         {{--<dl id="menu-picture">--}}

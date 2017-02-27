@@ -74,6 +74,12 @@ class JsonException extends Exception
         '20008' => [
             'msg' => '密码不正确',
         ],
+        '20009' => [
+            'msg' => '用户名已存在',
+        ],
+        '20010' => [
+            'msg' => '该用户已经被禁用，如有问题请联系管理员',
+        ],
 
         /*--- PermissionsController错误提示 ---*/
         '30000' => [

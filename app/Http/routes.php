@@ -37,7 +37,9 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::any('/permissions/add-level-permissions-iframe/{id}', 'PermissionsController@addLevelPermissionsIframe');
         Route::resource('/permissions', 'PermissionsController');
         //后台用户角色
-        //Route::resource('/role', 'RoleController');
+        Route::any('/role/role-permissions-iframe/{id}', 'RoleController@rolePermissionsIframe');
+        Route::any('/role/role-permissions', 'RoleController@rolePermissions');
+        Route::resource('/role', 'RoleController');
     });
 
 });

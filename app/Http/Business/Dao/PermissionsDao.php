@@ -10,7 +10,6 @@
 namespace App\Http\Business\Dao;
 
 use App;
-use DB;
 use App\Http\Common\Helper;
 use App\Exceptions\JsonException;
 use Illuminate\Support\Facades\Validator;

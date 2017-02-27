@@ -125,6 +125,8 @@ class UsersBusiness extends BusinessBase
         if (!preg_match('/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/', $data['email'])) {
             throw new JsonException(20006);
         }
+        //判断用户是否存在
+        $this->users_dao->isHasUsername($data['user_name']);
 
         DB::beginTransaction();
         try {
@@ -188,6 +190,8 @@ class UsersBusiness extends BusinessBase
         if (!preg_match('/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/', $data['email'])) {
             throw new JsonException(20006);
         }
+        //判断用户是否存在
+        $this->users_dao->isHasUsername($data['user_name']);
 
         $salt = mt_rand(1000, 9999);
 

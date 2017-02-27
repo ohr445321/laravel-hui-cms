@@ -16,6 +16,30 @@ use App\Exceptions\JsonException;
 class UsersDao extends DaoBase
 {
     /**
+     * 功能：判断用户名是否存在
+     * author: ouhanrong
+     * @param $username
+     * @return mixed
+     * @throws JsonException
+     */
+    public function isHasUsername($username)
+    {
+        $validator = Validator::make(['username' => $username], ['username'=> ['required']]);
+
+        if ($validator->fails()) {
+            throw new JsonException(10000, $validator->messages());
+        }
+
+        $users_model = App::make('UsersModel')->where(['username' => $username])->first();
+
+        if (!empty($users_model)) {
+            throw new JsonException(20009);
+        }
+
+        return $users_model;
+    }
+
+    /**
      * 功能：
      * author: ouhanrong
      * @param $username

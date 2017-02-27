@@ -25,7 +25,7 @@ class PermissionsController extends Controller
      */
     public function index(PermissionsBusiness $permissions_business)
     {
-        $list_data = $permissions_business->getPermissionsList(['all' => 1], ['*'], []);
+        $list_data = $permissions_business->getPermissionsList(['all' => 1, 'sort_column' => 'sort', 'sort_type' => 'asc'], ['*'], []);
 
         return view('admin.permissions.index', ['data' => ['list_data' => $list_data]]);
     }
