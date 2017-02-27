@@ -13,9 +13,6 @@ use App\Exceptions\JsonException;
 use App\Http\Business\Dao\UsersDao;
 use App\Http\Common\Helper;
 use DB;
-use Exception;
-use Illuminate\Support\Facades\Validator;
-use App\Facades\Test;
 
 class UsersBusiness extends BusinessBase
 {
@@ -33,7 +30,7 @@ class UsersBusiness extends BusinessBase
      * @return mixed
      * @throws JsonException
      */
-    public function deleteUser($id)
+    public function destoryUser($id)
     {
         if (empty($id || !is_numeric($id))) {
             throw new JsonException(10003);
@@ -65,22 +62,16 @@ class UsersBusiness extends BusinessBase
     }
 
     /**
-     * 功能：更新用户信息
+     * 功能：更新用户密码
      * author: ouhanrong
-     * @param $id
      * @param $data
      * @return mixed
      * @throws JsonException
      */
-    public function updateUser($id, $data)
+    public function updatePassword($data)
     {
-        if (empty($id) || !is_numeric($id)) {
+        if (empty($data['user_id']) || !is_numeric($data['user_id'])) {
             throw new JsonException(10003);
-        }
-
-        //用户名不能为空
-        if (empty($data['user_name'])) {
-            throw new JsonException(20000);
         }
         //密码不能为空
         if (empty($data['password'])) {
@@ -99,13 +90,41 @@ class UsersBusiness extends BusinessBase
             throw new JsonException(20003);
         }
         //原始密码是否正确
-        $user_data = $this->users_dao->getDetails($id, ['salt', 'password']);
+        $user_data = $this->users_dao->getDetails($data['user_id'], ['salt', 'password']);
         if (!Helper::checkEncryptPwd($user_data['password'], $data['old-password'], $user_data['salt'])) {
             throw new JsonException(20005);
         }
 
         //新密码加密
         $data['password'] = Helper::getEncryptPwd($data['password'], $user_data['salt']);
+
+        $response = $this->users_dao->updatePassword($data);
+
+        return $response;
+
+    }
+
+    /**
+     * 功能：更新用户信息
+     * author: ouhanrong
+     * @param $id
+     * @param $data
+     * @return mixed
+     * @throws JsonException
+     */
+    public function updateUser($id, $data)
+    {
+        if (empty($id) || !is_numeric($id)) {
+            throw new JsonException(10003);
+        }
+
+        //用户名不能为空
+        if (empty($data['user_name'])) {
+            throw new JsonException(20000);
+        }
+        if (!preg_match('/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/', $data['email'])) {
+            throw new JsonException(20006);
+        }
 
         DB::beginTransaction();
         try {
@@ -166,6 +185,9 @@ class UsersBusiness extends BusinessBase
         if ($data['password'] != $data['re-password']) {
             throw new JsonException(20003);
         }
+        if (!preg_match('/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/', $data['email'])) {
+            throw new JsonException(20006);
+        }
 
         $salt = mt_rand(1000, 9999);
 
@@ -198,10 +220,9 @@ class UsersBusiness extends BusinessBase
      */
     public function getUsersList(array $condition = [], array $select_columns = ['*'], array $relatives = [])
     {
-        $users_list = $this->users_dao->getUsersList($condition, $select_columns, $relatives);
+        $list = $this->users_dao->getUsersList($condition, $select_columns, $relatives);
 
-        return $users_list;
-
+        return $list;
     }
 
 }

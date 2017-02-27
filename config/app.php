@@ -159,6 +159,7 @@ return [
         /**
          * 自定义
          */
+        App\Providers\PaginationProvider::class,
         App\Providers\TestServiceProvider::class,
     ],
 

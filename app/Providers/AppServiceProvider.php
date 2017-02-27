@@ -25,5 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         /*********** 注册模型 ************/
         $this->app->bind('UsersModel', 'App\Model\Users');
+        $this->app->bind('PermissionsModel', 'App\Model\Permissions');
+        $this->app->bind('RoleModel', 'App\Model\Role');
     }
 }

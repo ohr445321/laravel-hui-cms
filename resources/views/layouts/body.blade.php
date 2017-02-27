@@ -1,55 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>后台管理|盛世创富</title>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="stylesheet" href="{{ asset('/static/admin/bootstrap/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('/static/admin/font-awesome/css/font-awesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('/static/admin/css/AdminLTE.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('/static/admin/css/skins/skin-green.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('/static/admin/css/skins/skin-green-light.min.css') }}">
-{{--    <link rel="stylesheet" href="{{ asset('/static/admin/css/skins/_all-skins.min.css') }}">--}}
-    <link rel="stylesheet" href="{{ asset('/static/admin/css/jquery.tagsinput.css') }}">
-    <link rel="stylesheet" href="{{ asset('/static/admin/plugins/iCheck/flat/blue.css') }}">
-    <link rel="stylesheet" href="{{ asset('/static/admin/plugins/uploadify/uploadify.css') }}">
-    @yield('css')
-</head>
-<body class="hold-transition skin-green sidebar-mini">
-<div class="wrapper">
-@include('layouts.header')
-@include('layouts.left')
-    <div class="content-wrapper">
-        <section class="content">
-            @yield('body')
-        </section>
+﻿{{--初始化首页页面--}}
+<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+<section class="Hui-article-box">
+    <a id="refresh_wrapper" class="btn btn-success radius r" style="line-height: 1.6em;margin-top: 1px;position: absolute;right: 10px;top: 0;z-index: 99999" href="javascript:void(0)" title="刷新">
+        <i class="Hui-iconfont"></i>
+    </a>
+    <div id="Hui-tabNav" class="Hui-tabNav hidden-xs">
+        <div class="Hui-tabNav-wp">
+            <ul id="min_title_list" class="acrossTab cl">
+                <li class="active"><span title="我的桌面" data-href="welcome.html">我的桌面</span><em></em></li>
+            </ul>
+        </div>
+        <div class="Hui-tabNav-more btn-group">
+            <a id="js-tabNav-prev" class="btn radius btn-default size-S" href="javascript:;"><i class="Hui-iconfont">&#xe6d4;</i></a>
+            <a id="js-tabNav-next" class="btn radius btn-default size-S" href="javascript:;"><i class="Hui-iconfont">&#xe6d7;</i></a>
+        </div>
     </div>
-@include('layouts.footer')
-    <script src="{{ asset('/static/admin/plugins/jQuery/jQuery-2.2.0.min.js') }}"></script>
-    <script src="{{ asset('/static/admin/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('/static/admin/js/app.min.js') }}"></script>
-    <script src="{{ asset('/static/admin/plugins/uploadify/jquery.uploadify.min.js') }}"></script>
-    <script src="{{ asset('/static/admin/plugins/layer/layer.js') }}"></script>
-    <script src="{{ asset('/static/admin/plugins/laydate/laydate.js') }}"></script>
-    <script type="text/javascript">
-        layer.config({
-            extend: 'extend/layer.ext.js'
-        });
-        laydate.skin('molv');
-
-        function jsonAjax(url,type,param,dataType,callback){
-            $.ajax({
-                url: url,
-                type: type,
-                dataType: dataType,
-                data: param,
-                async:false,
-                success: callback,
-            });
-        }
-
-    </script>
-    @yield('js')
-</div>
-</body>
+    <div id="iframe_box" class="Hui-article">
+        <div class="show_iframe">
+            <div style="display:none" class="loading"></div>
+            <iframe scrolling="yes" frameborder="0" src="{{ url('/admin/welcome') }}"></iframe>
+        </div>
+    </div>
+    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+</section>

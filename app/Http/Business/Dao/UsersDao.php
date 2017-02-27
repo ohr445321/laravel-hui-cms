@@ -10,13 +10,36 @@
 namespace App\Http\Business\Dao;
 
 use Illuminate\Support\Facades\App;
-use App\Http\Common\Helper;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\JsonException;
-use Exception;
 
 class UsersDao extends DaoBase
 {
+    /**
+     * 功能：
+     * author: ouhanrong
+     * @param $username
+     * @param array $select_colnums
+     * @return mixed
+     * @throws JsonException
+     */
+    public function getDetailsByUsername($username, array $select_colnums = ['*'])
+    {
+        $validator = Validator::make(['username' => $username], ['username'=> ['required']]);
+
+        if ($validator->fails()) {
+            throw new JsonException(10000, $validator->messages());
+        }
+
+        $users_model = App::make('UsersModel')->select($select_colnums)->where(['username' => $username])->first();
+
+        if (empty($users_model)) {
+            throw new JsonException(20007);
+        }
+
+        return $users_model;
+    }
+
     /**
      * 功能：删除用户
      * author: ouhanrong
@@ -48,7 +71,7 @@ class UsersDao extends DaoBase
      * @return mixed
      * @throws JsonException
      */
-    public function disabledUser($data)
+    public function disabledUser(array $data)
     {
         $check = [
             'id' => ['required', 'int'],
@@ -71,6 +94,33 @@ class UsersDao extends DaoBase
     }
 
     /**
+     * 功能：更新用户密码
+     * author: ouhanrong
+     * @param $data
+     * @return mixed
+     * @throws JsonException
+     */
+    public function updatePassword(array $data)
+    {
+        $validator = Validator::make($data, [
+            'user_id' => ['required', 'int'],
+            'password' => 'required'
+        ]);
+        if ($validator->fails()) {
+            throw new JsonException(10000, $validator->messages());
+        }
+        $users_model = App::make('UsersModel')->find($data['user_id']);
+
+        $users_model->password = $data['password'];
+
+        if (!$users_model->save()) {
+            throw new JsonException(10004);
+        }
+
+        return $users_model;
+    }
+
+    /**
      * 功能：修改用户
      * author: ouhanrong
      * @param $id
@@ -78,13 +128,14 @@ class UsersDao extends DaoBase
      * @return mixed
      * @throws JsonException
      */
-    public function updateUser($id, $data)
+    public function updateUser($id, array $data)
     {
         $data['user_id'] = $id;
         $validator = Validator::make($data, [
             'user_id' => ['required', 'int'],
             'user_name' => ['required'],
-            'password' => ['required'],
+            'sex' => 'required',
+            'email' => 'email',
         ]);
         if ($validator->fails()) {
             throw new JsonException(10000, $validator->messages());
@@ -93,7 +144,9 @@ class UsersDao extends DaoBase
         $users_model = App::make('UsersModel')->find($id);
 
         $users_model->username = $data['user_name'];
-        $users_model->password = $data['password'];
+        $users_model->sex = $data['sex'];
+        $users_model->email = empty($data['email']) ? '' : $data['email'];
+
         if (!$users_model->save()) {
             throw new JsonException(10004);
         }
@@ -108,12 +161,14 @@ class UsersDao extends DaoBase
      * @return mixed
      * @throws JsonException
      */
-    public function storeUser($data)
+    public function storeUser(array $data)
     {
         $validator = Validator::make($data, [
             'user_name' => 'required',
             'password' => 'required',
             'salt' => 'required',
+            'sex' => 'required',
+            'email' => 'email',
         ]);
         if ($validator->fails()) {
             throw new JsonException(10000, $validator->messages());
@@ -124,6 +179,9 @@ class UsersDao extends DaoBase
         $users_model->username = $data['user_name'];
         $users_model->password = $data['password'];
         $users_model->salt = $data['salt'];
+        $users_model->sex = $data['sex'];
+        $users_model->email = empty($data['email']) ? '' : $data['email'];
+        $users_model->create_time = date('YmdHis');
 
         if (!$users_model->save()) {
             throw new JsonException(10004);
@@ -152,9 +210,9 @@ class UsersDao extends DaoBase
             throw new JsonException('10000', $validator->messages());
         }
 
-        $user_data = App::make('UsersModel')->select($select_columns)->UserIdQuery($user_id)->first();
+        $data = App::make('UsersModel')->select($select_columns)->UserIdQuery($user_id)->first();
 
-        return $user_data;
+        return $data;
     }
 
     /**
@@ -170,12 +228,22 @@ class UsersDao extends DaoBase
     {
         $m_users = App::make('UsersModel')->select($select_columns);
 
+        //关键字搜索
+        if (!empty($condition['keyword'])) {
+            $keyword = $condition['keyword'];
+            $m_users->where(function($query) use($keyword){
+                $query->where('id','like', "%$keyword%")
+                    ->orWhere('username', 'like', "%$keyword%")
+                    ->orWhere('email', 'like', "%$keyword%");
+            });
+        }
+
         //列表排序
         $sort_column = empty($condition['sort_column']) ? 'id' : $condition['sort_column'];
         $sort_type = !empty($condition['sort_type']) && in_array($condition['sort_type'], ['asc', 'desc'])? $condition['sort_type'] : 'desc';
         $m_users->orderBy($sort_column, $sort_type);
         //分页数
-        $page = !empty($condition['page']) ? $condition['page'] : 10;
+        $page = !empty($condition['page_size']) ? $condition['page_size'] : 10;
 
         //获取全部列表信息
         if (!empty($condition['all'])) {

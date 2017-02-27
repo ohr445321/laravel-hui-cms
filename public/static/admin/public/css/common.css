@@ -1,0 +1,66 @@
+a:hover{
+    text-decoration:none;
+}
+.pagination{
+    padding:10px 0
+}
+.pagination:after{
+    content:'';
+    width:0;
+    height:0;
+    overflow:hidden;
+    clear: both;
+}
+.pagination .record{
+    float: right;
+    display: block;
+}
+.pagination ul{
+    float: left;
+    display: block;
+}
+
+
+.pagination li{
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 2px;
+    text-align: center;
+    text-decoration: none;
+    color: #666;
+    height: 26px;
+    line-height: 26px;
+    text-decoration: none;
+    margin: 0 0 6px 6px;
+    font-size: 14px;
+
+}
+.pagination li a,.pagination li span{
+    display: block;
+    height:100%;
+    width:100%;
+    box-sizing:border-box;
+    padding:0 10px;
+    text-decoration: none;
+}
+.pagination li.active span{
+    background:#5a98de
+}
+.pagination li a:hover{
+    background: #5a98de;
+    color: #fff;
+}
+
+
+.Hui-tabNav{
+    padding-right:150px;
+}
+.Hui-tabNav-more{
+    right:80px;
+}
+
+.menu_dropdown li.active a{
+    color:red;
+}
+

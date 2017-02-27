@@ -31,14 +31,14 @@
             }
 
             .title {
-                font-size: 96px;
+                font-size: 40px;
             }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Laravel 5</div>
+                <div class="title">欢迎使用CMS</div>
             </div>
         </div>
     </body>

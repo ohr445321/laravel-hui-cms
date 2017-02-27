@@ -10,12 +10,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Input;
 use App\Exceptions\JsonException;
 use App\Http\Business\UsersBusiness;
 use Illuminate\Http\Request;
-use TestClass;
 
 class UserController extends Controller
 {
@@ -25,15 +23,13 @@ class UserController extends Controller
      * @param UsersBusiness $users_business
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(UsersBusiness $users_business)
+    public function index(Request $request, UsersBusiness $users_business)
     {
-//        TestClass::doSomething();
-//
-//        exit();
+        $get_data = $request->all();
 
-        $user_data = $users_business->getUsersList(['page' => 2, 'sort_column' => 'id', 'sort_type' => 'desc'], ['*'], []);
+        $list_data = $users_business->getUsersList(array_merge($get_data, ['page_size' => 10, 'sort_column' => 'id', 'sort_type' => 'desc']), ['*'], []);
 
-        return view('admin.user.index', ['user_list' => $user_data]);
+        return view('admin.user.index', ['data' => ['get_data' => $get_data, 'user_list' => $list_data]]);
     }
 
     /**
@@ -50,17 +46,13 @@ class UserController extends Controller
     /**
      * 功能：保存用户
      * author: ouhanrong
-     * @param Input $input
+     * @param Request $request
      * @param UsersBusiness $users_business
      * @return array
      */
     public function store(Request $request, UsersBusiness $users_business)
     {
-        //$post_data = $input->get();
-
         $post_data = $request->all();
-
-        dd($post_data);
 
         $response = $users_business->storeUser($post_data);
 
@@ -78,7 +70,7 @@ class UserController extends Controller
      */
     public function edit($id, UsersBusiness $users_business)
     {
-        $data = $users_business->getUserDetails($id, ['id','username']);
+        $data = $users_business->getUserDetails($id, ['id','username','sex','email']);
 
         return view('admin.user.edit', ['user' => $data]);
     }
@@ -96,6 +88,32 @@ class UserController extends Controller
         $post_data = $input->get();
 
         $response = $users_business->updateUser($id, $post_data);
+
+        return $this->jsonFormat($response);
+    }
+
+    /**
+     * 功能：更新用户密码Iframe
+     * author: ouhanrong
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function updatePasswordIframe($id)
+    {
+        return view('admin.user.update-password-iframe', ['id' => $id]);
+    }
+
+    /**
+     * 功能：更新用户密码
+     * author: ouhanrong
+     * @param Request $request
+     * @param UsersBusiness $users_business
+     * @return array
+     */
+    public function updatePassword(Request $request, UsersBusiness $users_business)
+    {
+        $post_data = $request->all();
+
+        $response = $users_business->updatePassword($post_data);
 
         return $this->jsonFormat($response);
     }
@@ -119,15 +137,13 @@ class UserController extends Controller
     /**
      * 功能：删除用户
      * author: ouhanrong
-     * @param Input $input
+     * @param $id
      * @param UsersBusiness $users_business
      * @return array
      */
-    public function delete(Input $input, UsersBusiness $users_business)
+    public function destroy($id, UsersBusiness $users_business)
     {
-        $id = $input->get('id');
-
-        $response = $users_business->deleteUser($id);
+        $response = $users_business->destoryUser($id);
 
         return $this->jsonFormat($response);
     }
