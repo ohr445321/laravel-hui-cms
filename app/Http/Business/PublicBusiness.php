@@ -30,6 +30,7 @@ class PublicBusiness extends BusinessBase
 
         //根据用户名获取用户信息
         $user_data = $users_dao->getDetailsByUsername($data['username'], ['*']);
+
         //是否存在该用户
         if (empty($user_data)) {
             throw new JsonException(20007);

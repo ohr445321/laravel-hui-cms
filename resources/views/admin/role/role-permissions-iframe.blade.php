@@ -7,34 +7,10 @@
 <article class="page-container">
     <form action="" method="post" class="form form-horizontal" id="form-role-add">
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-        <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
-            <div class="formControls col-xs-8 col-sm-9">
-                <input type="text" class="input-text" value="" placeholder="" name="role_name">
-            </div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3">角色描述：</label>
-            <div class="formControls col-xs-8 col-sm-9">
-                <textarea name="remark" cols="" rows="" class="textarea"  placeholder="角色描述..." onKeyUp="$.Huitextarealength(this,255)"></textarea>
-                <p class="textarea-numberbar"><em class="textarea-length">0</em>/255</p>
-            </div>
-        </div>
-        <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色状态：</label>
-            <div class="formControls col-xs-8 col-sm-9 skin-minimal">
-                <div class="radio-box">
-                    <input name="is_disable" type="radio" value="0" checked>
-                    <label for="sex-1">启用</label>
-                </div>
-                <div class="radio-box">
-                    <input type="radio" value="1" name="is_disable">
-                    <label for="sex-2">禁用</label>
-                </div>
-            </div>
-        </div>
+        权限设置
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input type="hidden" name="role_id" value="{{ $id }}"/>
                 <input class="btn btn-primary radius submit-post" type="button" value="&nbsp;&nbsp;保存&nbsp;&nbsp;">
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <input class="btn btn-primary radius close-iframe" type="button" value="&nbsp;&nbsp;关闭&nbsp;&nbsp;">
@@ -59,6 +35,10 @@
             },
             initDom:function(){
                 this.dom.post_url = "{{ url('admin/role/') }}";
+                this.dom._token = "{{ csrf_token() }}";
+                $.post("{{ url('admin/role/ajax-get-role-permissions') }}", {'_token': this.dom._token, id: 1}, function (data) {
+                    console.log(data);
+                }, 'json');
             },
             vaildate:function(){
                 var flag = true;

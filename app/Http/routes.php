@@ -38,7 +38,8 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::resource('/permissions', 'PermissionsController');
         //后台用户角色
         Route::any('/role/role-permissions-iframe/{id}', 'RoleController@rolePermissionsIframe');
-        Route::any('/role/role-permissions', 'RoleController@rolePermissions');
+        Route::any('/role/ajax-get-role-permissions', 'RoleController@ajaxGetRolePermissions');
+        Route::any('/role/ajax-save-role-permissions', 'RoleController@ajaxSaveRolePermissions');
         Route::resource('/role', 'RoleController');
     });
 

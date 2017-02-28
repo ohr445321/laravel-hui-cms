@@ -40,7 +40,7 @@ class UsersDao extends DaoBase
     }
 
     /**
-     * 功能：
+     * 功能：通过用户名获取用户信息
      * author: ouhanrong
      * @param $username
      * @param array $select_colnums
@@ -55,7 +55,7 @@ class UsersDao extends DaoBase
             throw new JsonException(10000, $validator->messages());
         }
 
-        $users_model = App::make('UsersModel')->select($select_colnums)->where(['username' => $username])->first();
+        $users_model = App::make('UsersModel')->select($select_colnums)->where('username', $username)->first();
 
         if (empty($users_model)) {
             throw new JsonException(20007);

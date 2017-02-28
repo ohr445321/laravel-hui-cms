@@ -113,15 +113,36 @@ class RoleController extends Controller
      */
     public function rolePermissionsIframe($id, RoleBusiness $role_business)
     {
+        return view('admin.role.role-permissions-iframe', ['id' => $id]);
+    }
+
+    /**
+     * 功能：ajax获取权限设置数据
+     * author: ouhanrong
+     * @param Request $request
+     * @param RoleBusiness $role_business
+     * @return array
+     */
+    public function ajaxGetRolePermissions(Request $request, RoleBusiness $role_business)
+    {
+        $id = $request->get('id');
+
         //获取权限列表
         $data = $role_business->getRelationRolePermissionsList($id);
 
-        return view('admin.role.role-permissions-iframe', ['permissions' => $data]);
+        return $this->jsonFormat($data);
     }
 
-    public function rolePermissions(Request $request)
+    /**
+     * 功能：ajax保存权限设置数据
+     * author: ouhanrong
+     * @param Request $request
+     */
+    public function ajaxSaveRolePermissions(Request $request)
     {
+        $data = $request->all();
 
+        dump($data);
     }
 
 }
