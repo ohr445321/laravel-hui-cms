@@ -31,6 +31,19 @@ class PermissionsController extends Controller
     }
 
     /**
+     * 功能：ajax获取权限菜单列表数据
+     * author: ouhanrong
+     * @param PermissionsBusiness $permissions_business
+     * @return array
+     */
+    public function ajaxGetPermissionsList(PermissionsBusiness $permissions_business)
+    {
+        $list_data = $permissions_business->getPermissionsList(['all' => 1, 'sort_column' => 'sort', 'sort_type' => 'asc'], ['*'], []);
+
+        return $this->jsonFormat($list_data);
+    }
+
+    /**
      * 功能：添加权限弹框
      * author: ouhanrong
      */

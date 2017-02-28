@@ -40,6 +40,7 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::any('/role/role-permissions-iframe/{id}', 'RoleController@rolePermissionsIframe');
         Route::any('/role/ajax-get-role-permissions', 'RoleController@ajaxGetRolePermissions');
         Route::any('/role/ajax-save-role-permissions', 'RoleController@ajaxSaveRolePermissions');
+        Route::any('/role/ajax-get-role-permissions-list', 'RoleController@ajaxGetPermissionsList');
         Route::resource('/role', 'RoleController');
     });
 
