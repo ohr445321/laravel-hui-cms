@@ -1,14 +1,15 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <link rel="Bookmark" href="/favicon.ico" >
-    <link rel="Shortcut Icon" href="/favicon.ico" />
-
-    @include('layouts._meta')
-
+    <!-- <link rel="Bookmark" href="/favicon.ico" >
+    <link rel="Shortcut Icon" href="/favicon.ico" /> -->
+    <meta charset="utf-8">
     <title>CMS后台系统</title>
+    @include('layouts._meta')
     <meta name="keywords" content="盛世创富">
     <meta name="description" content="盛世创富CMS后台系统。">
+
+    
 </head>
 <body>
 

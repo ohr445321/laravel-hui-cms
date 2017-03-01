@@ -34,12 +34,12 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::resource('/user', 'UserController');
         //后台用户权限
         Route::any('/permissions/add-level-permissions-iframe/{id}', 'PermissionsController@addLevelPermissionsIframe');
+        Route::any('/permissions/ajax-get-role-permissions-list', 'PermissionsController@ajaxGetPermissionsList');
         Route::resource('/permissions', 'PermissionsController');
         //后台用户角色
         Route::any('/role/role-permissions-iframe/{id}', 'RoleController@rolePermissionsIframe');
         Route::any('/role/ajax-get-role-permissions', 'RoleController@ajaxGetRolePermissions');
         Route::any('/role/ajax-save-role-permissions', 'RoleController@ajaxSaveRolePermissions');
-        Route::any('/role/ajax-get-role-permissions-list', 'RoleController@ajaxGetPermissionsList');
         Route::resource('/role', 'RoleController');
     });
 });
