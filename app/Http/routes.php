@@ -35,6 +35,7 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         //后台用户权限
         Route::any('/permissions/add-level-permissions-iframe/{id}', 'PermissionsController@addLevelPermissionsIframe');
         Route::any('/permissions/ajax-get-role-permissions-list', 'PermissionsController@ajaxGetPermissionsList');
+        Route::any('/permissions/update-permissions-sort', 'PermissionsController@updatePermissionsSort');
         Route::resource('/permissions', 'PermissionsController');
         //后台用户角色
         Route::any('/role/role-permissions-iframe/{id}', 'RoleController@rolePermissionsIframe');

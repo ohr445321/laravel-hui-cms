@@ -221,4 +221,35 @@ class PermissionsDao extends DaoBase
 
         return empty($count) ? 0 : $count;
     }
+
+    /**
+     * 功能：根据permissions_id更新排序字段
+     * author: ouhanrong
+     * @param $id
+     * @param $sort
+     * @return mixed
+     * @throws JsonException
+     */
+    public function updatePermissionsSortById($id, $sort)
+    {
+        $check = [
+            'id' => ['required', 'int'],
+            'sort' => ['required', 'int']
+        ];
+
+        $validator = Validator::make(['id' => $id, 'sort' => $sort], $check);
+        if ($validator->fails()) {
+            throw new JsonException(10000, $validator->messages());
+        }
+
+        $permissions_model = App::make('PermissionsModel')->find($id);
+
+        $permissions_model->sort = $sort;
+
+        if (!$permissions_model->save()) {
+            throw new JsonException(10004);
+        }
+
+        return $permissions_model;
+    }
 }

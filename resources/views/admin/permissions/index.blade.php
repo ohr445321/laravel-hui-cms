@@ -14,7 +14,7 @@
             </div>
         </form>
         <div class="mt-20">
-            <form class="js-ajax-form" action="{{ url('/admin/permissions/') }}" method="get" method="post">
+            <form class="js-ajax-form" action="{{ url('/admin/permissions/update-permissions-sort') }}" method="get" method="post">
                 <div class="table-actions">
                     <button class="btn btn-primary btn-small sort" type="submit">排序</button>
                 </div>
@@ -176,11 +176,18 @@
                         })
                     })
                     console.log(data)
-                    // var data = paramsToJson('?'+str);
-                    // console.log(data);
-                    // $.post(post_url, {'_token': dom._token,data:data}, function (data) {
-                    //     console.log(data);
-                    // }, 'json');
+                    $.post(post_url, {'_token': dom._token,data:data}, function (msg) {
+                        console.log(msg);
+                        if(msg['code'] == 0){
+                            layer.msg(msg['msg'], {icon: 6});
+                            setTimeout(function(){
+                                window.location.reload();
+                            }, 500);
+                        }else{
+                            layer.msg(msg['msg'], {icon: 5});
+                            layer.close(index);
+                        }
+                    }, 'json');
                 },
                 bindEvent:function () {
                     var root = this;

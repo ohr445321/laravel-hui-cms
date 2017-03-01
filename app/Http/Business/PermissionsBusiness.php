@@ -170,8 +170,6 @@ class PermissionsBusiness extends BusinessBase
 
             throw new JsonException($e->getCode());
         }
-
-        return $response;
     }
 
     /**
@@ -211,8 +209,34 @@ class PermissionsBusiness extends BusinessBase
         return $data;
     }
 
+    /**
+     * 功能：更新权限排序
+     * author: ouhanrong
+     * @param $data
+     * @return bool
+     * @throws JsonException
+     */
     public function updatePermissionsSort($data)
     {
+        if (empty($data['data'])) {
+            throw new JsonException(10000);
+        }
 
+        DB::beginTransaction();
+        try {
+            foreach ($data['data'] as $vo) {
+
+                $this->permissions_dao->updatePermissionsSortById($vo['id'], $vo['sort']);
+            }
+
+            DB::commit();
+
+            return true;
+
+        } catch (JsonException $e) {
+            DB::rollback();
+
+            throw new JsonException($e->getCode());
+        }
     }
 }
