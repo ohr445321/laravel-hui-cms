@@ -186,7 +186,7 @@ class RoleBusiness extends BusinessBase
      */
     public function saveRolePermissions($data)
     {
-        if (empty($data['role_id']) || is_numeric($data['role_id'])) {
+        if (empty($data['role_id']) || !is_numeric($data['role_id'])) {
             throw new JsonException(10003);
         }
 
@@ -194,9 +194,11 @@ class RoleBusiness extends BusinessBase
 
         $data['permissions_ids'] = empty($data['permissions_ids']) ? [] : explode(',', $data['permissions_ids']);
 
-        foreach ($data['permissions_ids'] as &$permissions_id) {
-            $permissions_id = [$permissions_id => ['create_time' => $date]];
+        $permissions_ids = array();
+        foreach ($data['permissions_ids'] as $permissions_id) {
+            $permissions_ids[$permissions_id] = ['create_time' => $date];
         }
+        $data['permissions_ids'] = $permissions_ids;
 
         DB::beginTransaction();
         try {

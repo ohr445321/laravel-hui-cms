@@ -1,6 +1,7 @@
 a:hover{
     text-decoration:none;
 }
+/*分页条样式*/
 .pagination{
     padding:10px 0
 }
@@ -19,8 +20,6 @@ a:hover{
     float: left;
     display: block;
 }
-
-
 .pagination li{
     border: 1px solid #ccc;
     cursor: pointer;
@@ -34,7 +33,6 @@ a:hover{
     text-decoration: none;
     margin: 0 0 6px 6px;
     font-size: 14px;
-
 }
 .pagination li a,.pagination li span{
     display: block;
@@ -52,7 +50,7 @@ a:hover{
     color: #fff;
 }
 
-
+/**/
 .Hui-tabNav{
     padding-right:150px;
 }

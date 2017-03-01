@@ -160,7 +160,7 @@ return [
          * 自定义
          */
         App\Providers\PaginationProvider::class,
-        Jenssegers\Mongodb\MongodbServiceProvider::class,
+       //ssssss Jenssegers\Mongodb\MongodbServiceProvider::class,
 
         //Test ServiceProvider
         App\Providers\TestServiceProvider::class,

@@ -200,10 +200,10 @@ class RoleDao extends DaoBase
         $data['permissions_ids'] = empty($data['permissions_ids']) ? [] : $data['permissions_ids'];
 
         $m_roles = App::make('RoleModel')->find($data['role_id']);
-
+        
         //维护relation_role_permissions中间表
-        $m_roles->relationRolePermissions()->sync($m_roles);
-
+        $m_roles->relationRolePermissions()->sync($data['permissions_ids']);
+        
         return $m_roles;
     }
 }
