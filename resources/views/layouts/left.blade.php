@@ -2,16 +2,21 @@
     <input runat="server" id="divScrollValue" type="hidden" value="" />
     <div class="menu_dropdown bk_2">
         <dl id="menu-article">
-            <dt><i class="Hui-iconfont">&#xe616;</i> 用户管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dt><i class="Hui-iconfont">&#xe62d;</i> 用户管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
                     <li><a data-href="{{ url('/admin/user/') }}" data-title="用户管理" href="javascript:void(0)">用户管理</a></li>
                 </ul>
                 <ul>
-                    <li><a data-href="{{ url('/admin/permissions/') }}" data-title="菜单权限管理" href="javascript:void(0)">菜单权限管理</a></li>
+                    <li><a data-href="{{ url('/admin/role/') }}" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>
                 </ul>
+            </dd>
+        </dl>
+        <dl id="menu-article">
+            <dt><i class="Hui-iconfont">&#xe616;</i> 菜单管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
                 <ul>
-                    <li><a data-href="{{ url('/admin/role/') }}" data-title="用户角色管理" href="javascript:void(0)">用户角色管理</a></li>
+                    <li><a data-href="{{ url('/admin/permissions/') }}" data-title="菜单权限管理" href="javascript:void(0)">菜单权限管理</a></li>
                 </ul>
             </dd>
         </dl>

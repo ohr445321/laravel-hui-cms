@@ -27,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('UsersModel', 'App\Model\Users');
         $this->app->bind('PermissionsModel', 'App\Model\Permissions');
         $this->app->bind('RoleModel', 'App\Model\Role');
+
+        $this->app->bind('AdminLogModel', 'App\Model\AdminLog');
     }
 }

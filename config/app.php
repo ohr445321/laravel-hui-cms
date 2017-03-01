@@ -160,6 +160,9 @@ return [
          * 自定义
          */
         App\Providers\PaginationProvider::class,
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
+
+        //Test ServiceProvider
         App\Providers\TestServiceProvider::class,
     ],
 
@@ -210,6 +213,7 @@ return [
         /**
          * 自定义
          */
+        //TEST ALIAS
         'TestClass' => App\Facades\TestClass::class,
 
     ],

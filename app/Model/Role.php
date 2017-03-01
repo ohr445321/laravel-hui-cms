@@ -49,7 +49,7 @@ class Role extends Model
 
     public function relationRolePermissions()
     {
-        return $this->belongsToMany(__NAMESPACE__.'\Permissions', 'relation_role_permissions', 'role_id', 'permissions_id');
+        return $this->belongsToMany(__NAMESPACE__.'\Permissions', 'relation_role_permissions', 'role_id', 'permissions_id')->withTimestamps();
     }
 
 

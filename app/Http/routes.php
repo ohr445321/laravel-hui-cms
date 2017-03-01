@@ -14,7 +14,6 @@
 /**
  * 后台
  */
-
 Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
     //登陆
     Route::get('/login', 'PublicController@login');
@@ -43,5 +42,8 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
         Route::any('/role/ajax-get-role-permissions-list', 'RoleController@ajaxGetPermissionsList');
         Route::resource('/role', 'RoleController');
     });
+});
 
+Route::group(['prefix' => 'log', 'namespace' => 'Log'], function(){
+    Route::controller('/adminlog', 'AdminLogController');
 });

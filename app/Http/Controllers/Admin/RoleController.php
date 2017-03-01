@@ -137,12 +137,16 @@ class RoleController extends Controller
      * 功能：ajax保存权限设置数据
      * author: ouhanrong
      * @param Request $request
+     * @param RoleBusiness $role_business
+     * @return array
      */
-    public function ajaxSaveRolePermissions(Request $request)
+    public function ajaxSaveRolePermissions(Request $request, RoleBusiness $role_business)
     {
         $data = $request->all();
 
-        dump($data);
+        $response = $role_business->saveRolePermissions($data);
+
+        return $this->jsonFormat($response);
     }
 
 }

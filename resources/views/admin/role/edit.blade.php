@@ -30,11 +30,11 @@
                 <div class="radio-box">
                     <input type="radio" value="1" name="is_disable" @if($info->is_disable == 1) checked @endif>
                     <label for="sex-2">禁用</label>
-                </div
+                </div>
             </div>
         </div>
         {{ method_field('PUT') }}
-        <input type="hidden" name="role_id" value="{{ $info->id }}" />;
+        <input type="hidden" name="role_id" value="{{ $info->id }}" />
         <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
                 <input class="btn btn-primary radius submit-post" type="button" value="&nbsp;&nbsp;保存&nbsp;&nbsp;">

@@ -9,6 +9,7 @@
 
 namespace App\Http\Business;
 
+use App\Exceptions\JsonException;
 use App\Http\Business\Dao\PermissionsDao;
 use DB;
 use App\Http\Business\BusinessBase;
@@ -46,6 +47,7 @@ class RoleBusiness extends BusinessBase
      * author: ouhanrong
      * @param $data
      * @return mixed
+     * @throws JsonException
      */
     public function storeRole($data)
     {
@@ -75,6 +77,7 @@ class RoleBusiness extends BusinessBase
      * @param $user_id
      * @param array $select_colunms
      * @return mixed
+     * @throws JsonException
      */
     public function getRoleDetails($user_id, array $select_colunms = ['*'])
     {
@@ -93,6 +96,7 @@ class RoleBusiness extends BusinessBase
      * @param $id
      * @param $data
      * @return mixed
+     * @throws JsonException
      */
     public function updateRole($id, $data)
     {
@@ -125,6 +129,7 @@ class RoleBusiness extends BusinessBase
      * author: ouhanrong
      * @param $id
      * @return mixed
+     * @throws JsonException
      */
     public function destoryRole($id)
     {
@@ -142,6 +147,7 @@ class RoleBusiness extends BusinessBase
      * author: ouhanrong
      * @param $role_id
      * @return array|static
+     * @throws JsonException
      */
     public function getRelationRolePermissionsList($role_id)
     {
@@ -169,6 +175,42 @@ class RoleBusiness extends BusinessBase
         });
 
         return $tree_data;
+    }
+
+    /**
+     * 功能：保存维护relation_role_permissions中间表
+     * author: ouhanrong
+     * @param $data
+     * @return mixed
+     * @throws JsonException
+     */
+    public function saveRolePermissions($data)
+    {
+        if (empty($data['role_id']) || is_numeric($data['role_id'])) {
+            throw new JsonException(10003);
+        }
+
+        $date = date('YmdHis');
+
+        $data['permissions_ids'] = empty($data['permissions_ids']) ? [] : explode(',', $data['permissions_ids']);
+
+        foreach ($data['permissions_ids'] as &$permissions_id) {
+            $permissions_id = [$permissions_id => ['create_time' => $date]];
+        }
+
+        DB::beginTransaction();
+        try {
+            $response = $this->role_dao->saveRolePermissions($data);
+
+            DB::commit();
+
+            return $response;
+
+        } catch (JsonException $e) {
+            DB::rollback();
+
+            throw new JsonException($e->getCode());
+        }
     }
 
 }

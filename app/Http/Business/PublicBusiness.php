@@ -26,6 +26,13 @@ class PublicBusiness extends BusinessBase
      */
     public function checkLogin($data)
     {
+        if (empty($data['username'])) {
+            throw new JsonException(40003);
+        }
+        if (empty($data['password'])) {
+            throw new JsonException(40004);
+        }
+
         $users_dao = new UsersDao();
 
         //根据用户名获取用户信息
@@ -33,15 +40,15 @@ class PublicBusiness extends BusinessBase
 
         //是否存在该用户
         if (empty($user_data)) {
-            throw new JsonException(20007);
+            throw new JsonException(40000);
         }
         //判断用户状态是否被禁用
         if ($user_data['is_disable'] == 1) {
-            throw new JsonException(20010);
+            throw new JsonException(40002);
         }
         //判断密码是否正确
         if (!Helper::checkEncryptPwd($user_data->password, $data['password'], $user_data->salt)) {
-            throw new JsonException(20008);
+            throw new JsonException(40001);
         }
 
         //保存用户信息到session

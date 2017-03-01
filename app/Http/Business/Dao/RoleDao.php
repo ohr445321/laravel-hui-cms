@@ -17,61 +17,86 @@ use App\Exceptions\JsonException;
 class RoleDao extends DaoBase
 {
     /**
-     * 功能：删除用户角色
+     * 功能：获取角色列表数据
      * author: ouhanrong
-     * @param $id
+     * @param array $condition
+     * @param array $select_columns
+     * @param array $relatives
      * @return mixed
-     * @throws JsonException
      */
-    public function destoryRole($id)
+    public function getRoleList(array $condition = [], array $select_columns = ['*'], array $relatives = [])
     {
-        $vaildator = Validator::make(['id' => $id], ['id' => ['required', 'int']]);
+        $m_roles = App::make('RoleModel')->select($select_columns);
 
-        if ($vaildator->fails()) {
-            throw new JsonException(10000, $vaildator->messages());
+        //关键字搜索
+        if (!empty($condition['keyword'])) {
+            $keyword = $condition['keyword'];
+            $m_roles->where(function($query) use($keyword){
+                $query->where('id','like', "%$keyword%")
+                    ->orWhere('role_name', 'like', "%$keyword%")
+                    ->orWhere('remark', 'like', "%$keyword%");
+            });
         }
 
-        $users_model = App::make('RoleModel')->find($id);
+        //列表排序
+        $sort_column = empty($condition['sort_column']) ? 'id' : $condition['sort_column'];
+        $sort_type = !empty($condition['sort_type']) && in_array($condition['sort_type'], ['asc', 'desc'])? $condition['sort_type'] : 'desc';
+        $m_roles->orderBy($sort_column, $sort_type);
+        //分页数
+        $page = !empty($condition['page_size']) ? $condition['page_size'] : 10;
 
-        if (!$users_model->delete()) {
-            throw new JsonException(10004);
+        //获取全部列表信息
+        if (!empty($condition['all'])) {
+            return $m_roles->get();
         }
 
-        return $users_model;
+        return $m_roles->paginate($page);
     }
 
     /**
-     * 功能：更新用户角色
+     * 功能：通过$role_id 获取对应所属的用户权限
      * author: ouhanrong
-     * @param $id
+     * @param $role_id
+     * @return mixed
+     */
+    public function getPermissionsById($role_id)
+    {
+        $role_permissions_data = App::make('RoleModel')->select(['id'])->find($role_id)->load(['relationRolePermissions' => function ($query) {
+            $query->select(['permissions_name']);
+        }]);
+
+        return $role_permissions_data;
+    }
+
+    /**
+     * 功能：
+     * author: ouhanrong
      * @param array $data
      * @return mixed
      * @throws JsonException
      */
-    public function updateRole($id, array $data)
+    public function storeRole(array $data)
     {
-        $data['id'] = $id;
         $validator = Validator::make($data, [
-            'id' => ['required', 'int'],
-            'role_name' => ['required'],
+            'role_name' => 'required',
             'is_disable' => ['required', 'int'],
         ]);
         if ($validator->fails()) {
             throw new JsonException(10000, $validator->messages());
         }
 
-        $users_model = App::make('RoleModel')->find($id);
+        $m_roles = App::make('RoleModel');
 
-        $users_model->role_name = $data['role_name'];
-        $users_model->remark = empty($data['remark']) ? '' : $data['remark'];
-        $users_model->is_disable = !empty($data['is_disable']) ? 1 : 0;
-        $users_model->update_time = date('YmdHis');
+        $m_roles->role_name = $data['role_name'];
+        $m_roles->remark = empty($data['remark']) ? '' : $data['remark'];
+        $m_roles->is_disable = !empty($data['is_disable']) ? 1 : 0;
+        $m_roles->create_time = date('YmdHis');
 
-        if (!$users_model->save()) {
+        if (!$m_roles->save()) {
             throw new JsonException(10004);
         }
 
-        return $users_model;
+        return $m_roles;
     }
 
     /**
@@ -100,85 +125,85 @@ class RoleDao extends DaoBase
     }
 
     /**
-     * 功能：
+     * 功能：更新用户角色
      * author: ouhanrong
+     * @param $id
      * @param array $data
      * @return mixed
      * @throws JsonException
      */
-    public function storeRole(array $data)
+    public function updateRole($id, array $data)
     {
+        $data['id'] = $id;
         $validator = Validator::make($data, [
-            'role_name' => 'required',
+            'id' => ['required', 'int'],
+            'role_name' => ['required'],
             'is_disable' => ['required', 'int'],
         ]);
         if ($validator->fails()) {
             throw new JsonException(10000, $validator->messages());
         }
 
-        $users_model = App::make('RoleModel');
+        $m_roles = App::make('RoleModel')->find($id);
 
-        $users_model->role_name = $data['role_name'];
-        $users_model->remark = empty($data['remark']) ? '' : $data['remark'];
-        $users_model->is_disable = !empty($data['is_disable']) ? 1 : 0;
-        $users_model->create_time = date('YmdHis');
+        $m_roles->role_name = $data['role_name'];
+        $m_roles->remark = empty($data['remark']) ? '' : $data['remark'];
+        $m_roles->is_disable = !empty($data['is_disable']) ? 1 : 0;
+        $m_roles->update_time = date('YmdHis');
 
-        if (!$users_model->save()) {
+        if (!$m_roles->save()) {
             throw new JsonException(10004);
         }
 
-        return $users_model;
+        return $m_roles;
     }
 
     /**
-     * 功能：获取角色列表数据
+     * 功能：删除用户角色
      * author: ouhanrong
-     * @param array $condition
-     * @param array $select_columns
-     * @param array $relatives
+     * @param $id
      * @return mixed
+     * @throws JsonException
      */
-    public function getRoleList(array $condition = [], array $select_columns = ['*'], array $relatives = [])
+    public function destoryRole($id)
     {
-        $m_role = App::make('RoleModel')->select($select_columns);
+        $vaildator = Validator::make(['id' => $id], ['id' => ['required', 'int']]);
 
-        //关键字搜索
-        if (!empty($condition['keyword'])) {
-            $keyword = $condition['keyword'];
-            $m_role->where(function($query) use($keyword){
-                $query->where('id','like', "%$keyword%")
-                    ->orWhere('role_name', 'like', "%$keyword%")
-                    ->orWhere('remark', 'like', "%$keyword%");
-            });
+        if ($vaildator->fails()) {
+            throw new JsonException(10000, $vaildator->messages());
         }
 
-        //列表排序
-        $sort_column = empty($condition['sort_column']) ? 'id' : $condition['sort_column'];
-        $sort_type = !empty($condition['sort_type']) && in_array($condition['sort_type'], ['asc', 'desc'])? $condition['sort_type'] : 'desc';
-        $m_role->orderBy($sort_column, $sort_type);
-        //分页数
-        $page = !empty($condition['page_size']) ? $condition['page_size'] : 10;
+        $m_roles = App::make('RoleModel')->find($id);
 
-        //获取全部列表信息
-        if (!empty($condition['all'])) {
-            return $m_role->get();
+        if (!$m_roles->delete()) {
+            throw new JsonException(10004);
         }
 
-        return $m_role->paginate($page);
+        return $m_roles;
     }
 
     /**
-     * 功能：通过$role_id 获取对应所属的用户权限
+     * 功能：保存维护relation_role_permissions中间边关系
      * author: ouhanrong
-     * @param $role_id
+     * @param $data
      * @return mixed
+     * @throws JsonException
      */
-    public function getPermissionsById($role_id)
+    public function saveRolePermissions($data)
     {
-        $role_permissions_data = App::make('RoleModel')->select(['id'])->find($role_id)->load(['relationRolePermissions' => function ($query) {
-            $query->select(['permissions_name']);
-        }]);
+        $vaildator = Validator::make(['role_id' => $data['role_id']], ['role_id' => ['required', 'int']]);
 
-        return $role_permissions_data;
+        if ($vaildator->fails()) {
+            throw new JsonException(10000, $vaildator->messages());
+        }
+
+        $data['permissions_ids'] = empty($data['permissions_ids']) ? [] : $data['permissions_ids'];
+
+        $m_roles = App::make('RoleModel')->find($data['role_id']);
+
+        //维护relation_role_permissions中间表
+        $m_roles->relationRolePermissions()->sync($m_roles);
+
+        return $m_roles;
     }
 }
