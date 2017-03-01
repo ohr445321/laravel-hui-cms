@@ -134,5 +134,21 @@ class PermissionsController extends Controller
         return view('admin.permissions.add-level-permissions-iframe', ['parent_id' => $id, 'permissions_tree_data' => $tree_data]);
     }
 
+    /**
+     * 功能：更新排序
+     * author: ouhanrong
+     * @param Request $request
+     * @param PermissionsBusiness $permissions_business
+     * @return array
+     */
+    public function updatePermissionsSort(Request $request, PermissionsBusiness $permissions_business)
+    {
+        $data = $request->all();
+
+        $response = $permissions_business->updatePermissionsSort($data);
+
+        return $this->jsonFormat($response);
+    }
+
 
 }

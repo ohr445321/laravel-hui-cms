@@ -210,4 +210,9 @@ class PermissionsBusiness extends BusinessBase
 
         return $data;
     }
+
+    public function updatePermissionsSort($data)
+    {
+
+    }
 }
