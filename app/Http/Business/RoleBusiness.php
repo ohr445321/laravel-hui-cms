@@ -161,6 +161,7 @@ class RoleBusiness extends BusinessBase
 
         //获取对应$role_id对应的权限菜单ids
         $role_permissions_data = $this->role_dao->getPermissionsById($role_id);
+
         $permissions_ids = $role_permissions_data->relationRolePermissions->map(function ($permissions) {
             return $permissions['pivot']['permissions_id'];
         });

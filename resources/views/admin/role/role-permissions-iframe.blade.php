@@ -42,6 +42,7 @@
             initDom:function(){
                 var dom = this.dom;
                 var self = this;
+                dom.role_id = $("input[name='role_id']").val();
                 dom.post_url = "{{ url('admin/role/ajax-save-role-permissions') }}";
                 dom._token = "{{ csrf_token() }}";
                 dom.chkIds = [];
@@ -75,7 +76,8 @@
                         }
                     }
                 };
-                $.post("{{ url('admin/role/ajax-get-role-permissions') }}", {'_token': this.dom._token, id: 1}, function (data) {
+                $.post("{{ url('admin/role/ajax-get-role-permissions') }}", {'_token': this.dom._token, id: dom.role_id}, function (data) {
+                    console.log(data.data);
                     $.fn.zTree.init($("#treeDemo"), dom.setting, data.data);
                 }, 'json');
             },
@@ -93,6 +95,7 @@
                     permissions_ids : ''
                 }
                 data.permissions_ids = dom.chkIds.join(',');
+                console.log(data.permissions_ids);
 
                 $.post(dom.post_url, data, function(msg){
                     if (msg.code == 0) {

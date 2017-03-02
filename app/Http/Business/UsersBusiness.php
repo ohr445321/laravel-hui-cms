@@ -126,7 +126,7 @@ class UsersBusiness extends BusinessBase
             throw new JsonException(20006);
         }
         //判断用户是否存在
-        $this->users_dao->isHasUsername($data['user_name']);
+        $this->users_dao->isHasUsernameNotInId($id, $data['user_name']);
 
         DB::beginTransaction();
         try {

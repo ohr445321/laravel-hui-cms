@@ -12,11 +12,13 @@ namespace App\Http\Business\Dao;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\JsonException;
+use App\Http\Business\Dao\DaoBase;
+use DB;
 
 class UsersDao extends DaoBase
 {
     /**
-     * 功能：判断用户名是否存在
+     * 功能：添加用户判断用户名是否存在
      * author: ouhanrong
      * @param $username
      * @return mixed
@@ -31,6 +33,31 @@ class UsersDao extends DaoBase
         }
 
         $users_model = App::make('UsersModel')->where(['username' => $username])->first();
+
+        if (!empty($users_model)) {
+            throw new JsonException(20009);
+        }
+
+        return $users_model;
+    }
+
+    /**
+     * 功能：编辑用户判断用户是否已经存在
+     * author: ouhanrong
+     * @param $id
+     * @param $username
+     * @return mixed
+     * @throws JsonException
+     */
+    public function isHasUsernameNotInId($id, $username)
+    {
+        $validator = Validator::make(['id' => $id, 'username' => $username], ['id' => ['required', 'int'], 'username'=> ['required']]);
+
+        if ($validator->fails()) {
+            throw new JsonException(10000, $validator->messages());
+        }
+
+        $users_model = App::make('UsersModel')->whereNotIn('id', [$id])->where(['username' => $username])->first();
 
         if (!empty($users_model)) {
             throw new JsonException(20009);
@@ -56,7 +83,6 @@ class UsersDao extends DaoBase
         }
 
         $users_model = App::make('UsersModel')->select($select_colnums)->where('username', $username)->first();
-
         if (empty($users_model)) {
             throw new JsonException(20007);
         }
