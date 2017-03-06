@@ -32,7 +32,13 @@
                 this.initDom();
             },
             initDom:function () {
-                this.dom._token = $("input[name='_token']").val();
+                var _dom = this.dom;
+                _dom._token = $("input[name='_token']").val();
+                _dom.menu_data = [];
+                $.post("{{ url('admin/ajax-get-permission-menu') }}", {_token: "{{ csrf_token() }}"}, function(data){
+                    _dom.menu_data = data['data'];
+                    console.log(_dom.menu_data);
+                }, 'json')
             },
             //个人信息
             userInfo:function (root) {
