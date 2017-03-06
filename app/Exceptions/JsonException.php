@@ -77,6 +77,9 @@ class JsonException extends Exception
         '20009' => [
             'msg' => '用户名已存在',
         ],
+        '20010' => [
+            'msg' => '请选择角色',
+        ],
 
         /*--- PermissionsController错误提示 ---*/
         '30000' => [

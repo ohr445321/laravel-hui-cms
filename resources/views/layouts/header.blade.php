@@ -5,10 +5,10 @@
             <span class="logo navbar-slogan f-l mr-10 hidden-xs">v1.0</span>
             <nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
                 <ul class="cl">
-                    <li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A">{{ $user_info['username'] }} <i class="Hui-iconfont">&#xe6d5;</i></a>
+                    <li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A">{{ $data['user_info']['username'] }} <i class="Hui-iconfont">&#xe6d5;</i></a>
                         <ul class="dropDown-menu menu radius box-shadow">
-                            <li><a class="user-info" href="javascript:;" href-url="{{ url('/admin/user/'.$user_info['user_id'].'/edit')}}">个人信息</a></li>
-                            <li><a class="edit-password" href="javascript:;" href-url="{{ url('/admin/user/updatePasswordIframe/'.$user_info['user_id'] )}}">修改密码</a></li>
+                            <li><a class="user-info" href="javascript:;" href-url="{{ url('/admin/user/'.$data['user_info']['user_id'].'/edit')}}">个人信息</a></li>
+                            <li><a class="edit-password" href="javascript:;" href-url="{{ url('/admin/user/updatePasswordIframe/'.$data['user_info']['user_id'] )}}">修改密码</a></li>
                             <li><a class="logout" href="javascript:;" href-url="{{ url('/admin/public/logout') }}">退出</a></li>
                         </ul>
                     </li>

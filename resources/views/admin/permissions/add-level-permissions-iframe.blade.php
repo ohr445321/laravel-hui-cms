@@ -46,11 +46,11 @@
             <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是否显示菜单：</label>
             <div class="formControls col-xs-8 col-sm-9">
                 <div class="radio-box">
-                    <input type="radio" name="is_meun" value="0" checked>
+                    <input type="radio" name="is_menu" value="0" checked>
                     <label for="radio-1">否</label>
                 </div>
                 <div class="radio-box">
-                    <input type="radio" name="is_meun" value="1">
+                    <input type="radio" name="is_menu" value="1">
                     <label for="radio-2">是</label>
                 </div>
             </div>
@@ -124,7 +124,7 @@
                 var permissions_name = $("input[name='permissions_name']").val();
                 var route_name = $("input[name='route_name']").val();
                 var icon = $("input[name='icon']").val();
-                var is_meun = $("input[name='is_meun']:checked").val();
+                var is_menu = $("input[name='is_menu']:checked").val();
                 var is_api = $("input[name='is_api']:checked").val();
                 var sort = $("input[name='sort']").val();
                 var _token = $("input[name='_token']").val();
@@ -137,7 +137,7 @@
                     permissions_name: permissions_name,
                     route_name: route_name,
                     icon: icon,
-                    is_meun: is_meun,
+                    is_menu: is_menu,
                     is_api: is_api,
                     sort: sort
                 };

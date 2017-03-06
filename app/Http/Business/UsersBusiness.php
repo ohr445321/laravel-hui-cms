@@ -12,15 +12,18 @@ namespace App\Http\Business;
 use App\Exceptions\JsonException;
 use App\Http\Business\Dao\UsersDao;
 use App\Http\Common\Helper;
+use App\Http\Business\RoleBusiness;
 use DB;
 
 class UsersBusiness extends BusinessBase
 {
     private $users_dao = null;
+    private $role_dao = null;
 
-    public function __construct(UsersDao $users_dao)
+    public function __construct(UsersDao $users_dao, RoleBusiness $role_business)
     {
         $this->users_dao = $users_dao;
+        $this->role_dao = $role_business;
     }
 
     /**
@@ -125,6 +128,10 @@ class UsersBusiness extends BusinessBase
         if (!preg_match('/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/', $data['email'])) {
             throw new JsonException(20006);
         }
+        //选择用户关联角色
+        if (empty($data['role_id'])) {
+            throw new JsonException(20010);
+        }
         //判断用户是否存在
         $this->users_dao->isHasUsernameNotInId($id, $data['user_name']);
 
@@ -190,6 +197,11 @@ class UsersBusiness extends BusinessBase
         if (!preg_match('/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/', $data['email'])) {
             throw new JsonException(20006);
         }
+        //选择用户关联角色
+        if (empty($data['role_id'])) {
+            throw new JsonException(20010);
+        }
+
         //判断用户是否存在
         $this->users_dao->isHasUsername($data['user_name']);
 
@@ -224,7 +236,21 @@ class UsersBusiness extends BusinessBase
      */
     public function getUsersList(array $condition = [], array $select_columns = ['*'], array $relatives = [])
     {
+        //获取用户列表
         $list = $this->users_dao->getUsersList($condition, $select_columns, $relatives);
+        //获取全部角色
+        $role_data = $this->role_dao->getRoleList(['all' => 1, 'sort_column' => 'id', 'sort_type' => 'asc'], ['id','role_name'], []);
+
+        //转换成数据形式
+        $role_data_arr = array();
+        foreach ($role_data as $vo_r) {
+            $role_data_arr[$vo_r->id] = $vo_r->role_name;
+        }
+
+        //role_id 转换为 角色名称
+        foreach ($list as &$li) {
+            $li->role_name = $role_data_arr[$li->role_id];
+        }
 
         return $list;
     }

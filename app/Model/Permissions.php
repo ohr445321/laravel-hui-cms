@@ -34,6 +34,11 @@ class Permissions extends Model
         return $query->where('id', $value);
     }
 
+    public function scopeIsMenu($query, $value)
+    {
+        return $query->where('is_menu', $value);
+    }
+
     /**
      * 功能：获取记录创建时间
      * author: ouhanrong

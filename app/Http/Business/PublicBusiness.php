@@ -16,6 +16,12 @@ use DB;
 
 class PublicBusiness extends BusinessBase
 {
+    private $users_dao = null;
+
+    public function __construct(UsersDao $users_dao)
+    {
+        $this->users_dao = $users_dao;
+    }
 
     /**
      * 功能：检测用户登陆
@@ -33,10 +39,8 @@ class PublicBusiness extends BusinessBase
             throw new JsonException(40004);
         }
 
-        $users_dao = new UsersDao();
-
         //根据用户名获取用户信息
-        $user_data = $users_dao->getDetailsByUsername($data['username'], ['*']);
+        $user_data = $this->users_dao->getDetailsByUsername($data['username'], ['*']);
 
         //是否存在该用户
         if (empty($user_data)) {
@@ -54,10 +58,12 @@ class PublicBusiness extends BusinessBase
         //保存用户信息到session
         $session_data = [
             'user_id' => $user_data->id,
-            'username' => $user_data->username
+            'username' => $user_data->username,
+            'role_id' => $user_data->role_id,
         ];
         session([config('site.user_session_key') => $session_data]);
 
         return $session_data;
     }
+
 }

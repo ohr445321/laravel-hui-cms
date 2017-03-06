@@ -28,6 +28,10 @@ class PermissionsDao extends DaoBase
     {
         $m_permissions = App::make('PermissionsModel')->select($select_columns);
 
+        if (isset($condition['is_menu']) && is_numeric($condition['is_menu'])) {
+            $m_permissions->IsMenu(intval($condition['is_menu']));
+        }
+
         //列表排序
         $sort_column = empty($condition['sort_column']) ? 'id' : $condition['sort_column'];
         $sort_type = !empty($condition['sort_type']) && in_array($condition['sort_type'], ['asc', 'desc'])? $condition['sort_type'] : 'desc';

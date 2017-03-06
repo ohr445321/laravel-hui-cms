@@ -133,7 +133,7 @@ class RoleBusiness extends BusinessBase
      */
     public function destoryRole($id)
     {
-        if (empty($id || !is_numeric($id))) {
+        if (empty($id) || !is_numeric($id)) {
             throw new JsonException(10003);
         }
 
@@ -151,7 +151,7 @@ class RoleBusiness extends BusinessBase
      */
     public function getRelationRolePermissionsList($role_id)
     {
-        if (empty($role_id || !is_numeric($role_id))) {
+        if (empty($role_id) || !is_numeric($role_id)) {
             throw new JsonException(10003);
         }
 
@@ -214,6 +214,41 @@ class RoleBusiness extends BusinessBase
 
             throw new JsonException($e->getCode());
         }
+    }
+
+    /**
+     * 功能：根据role_id获取对应用户的菜单数据
+     * author: ouhanrong
+     * @param $role_id
+     * @return array|\Illuminate\Support\Collection
+     */
+    public function getPermissionMenuByRoleId($role_id)
+    {
+        if (empty($role_id) || !is_numeric($role_id)) {
+            return [];
+        }
+
+        //获取全部权限菜单
+        $permissions_data = $this->permissions_dao->getPermissionsList(['all' => 1, 'is_menu' => 1], ['id','permissions_name', 'route_name', 'icon','parent_id','level', 'is_menu', 'is_final'], []);
+        $tree_data = Helper::getSubs($permissions_data->toArray(), 0, 1);
+
+        //获取对应$role_id对应的权限菜单ids
+        $role_permissions_data = $this->role_dao->getPermissionsById($role_id);
+
+        $permissions_ids = $role_permissions_data->relationRolePermissions->map(function ($permissions) {
+            return $permissions['pivot']['permissions_id'];
+        });
+
+        //权限菜单匹配对应角色是否拥有该权限
+        $menu_data = collect();
+        collect($tree_data)->map(function ($vo) use ($permissions_ids, $menu_data) {
+            if ($permissions_ids->search($vo['id'], true) !== false) {
+                $vo['route_name'] = url($vo['route_name']);
+                $menu_data->push($vo);
+            }
+        });
+
+        return $menu_data;
     }
 
 }

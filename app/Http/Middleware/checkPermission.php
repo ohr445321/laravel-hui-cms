@@ -10,6 +10,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
 class checkPermission
 {
@@ -30,6 +31,9 @@ class checkPermission
         if (empty($user_id) || empty($username)) {
             return redirect('/admin/login');
         }
+
+        //        dump($request->method());exit;
+        //dump($request->segments());exit;
 
         $response = $next($request);
 

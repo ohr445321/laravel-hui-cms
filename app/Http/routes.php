@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/', function(){
+    return redirect(url('/admin/'));
+});
+
 /**
  * 后台
  */
@@ -23,6 +27,7 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin'],function(){
     Route::group(['middleware' => ['permission']],function () {
         //后台首页
         Route::get('/','IndexController@index');
+        Route::any('/ajax-get-permission-menu', 'IndexController@ajaxGetPermissionMenu');
         //后台欢迎页
         Route::get('/welcome', 'IndexController@welcome');
         //后台public模块

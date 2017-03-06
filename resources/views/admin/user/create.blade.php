@@ -49,6 +49,17 @@
             </div>
         </div>
         <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色：</label>
+            <div class="formControls col-xs-8 col-sm-9 skin-minimal">
+                @foreach($role_data as $vo_r)
+                    <div class="radio-box">
+                        <input name="role_id" type="radio" id="role-{{ $vo_r->id }}" value="{{ $vo_r->id }}" >
+                        <label for="role-{{ $vo_r->id }}">{{ $vo_r->role_name }}</label>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        <div class="row cl">
             <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
                 <input class="btn btn-primary radius submit-post" type="button" value="&nbsp;&nbsp;保存&nbsp;&nbsp;">
                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -82,6 +93,7 @@
                 var repassword = $('#re-password').val();
                 var sex = $("input[name='sex']:checked").val();
                 var email = $('#email').val();
+                var role_id = $("input[name='role_id']:checked").val();
 
                 if (username.length <= 0) {
                     layer.msg('用户名不能为空~', {icon: 5,time: 2500});
@@ -102,6 +114,10 @@
                 if(!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/))
                 {
                     layer.msg('邮箱格式不正确~', {icon: 5,time: 2500});
+                    return false;
+                }
+                if (!role_id || role_id == undefined) {
+                    layer.msg('请选择角色~', {icon: 5,time: 2500});
                     return false;
                 }
 

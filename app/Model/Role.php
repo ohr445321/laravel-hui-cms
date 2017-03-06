@@ -34,6 +34,11 @@ class Role extends Model
         return $query->where('id', $id);
     }
 
+    public function scopeIsDisableQuery($query, $value)
+    {
+        return $query->where('is_disable', $value);
+    }
+
     /**
      * 功能：获取记录创建时间
      * author: ouhanrong

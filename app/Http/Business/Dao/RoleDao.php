@@ -38,6 +38,10 @@ class RoleDao extends DaoBase
             });
         }
 
+        if (isset($condition['is_disable']) && is_numeric($condition['is_disable'])) {
+            $m_roles->IsDisableQuery($condition['is_disable']);
+        }
+
         //列表排序
         $sort_column = empty($condition['sort_column']) ? 'id' : $condition['sort_column'];
         $sort_type = !empty($condition['sort_type']) && in_array($condition['sort_type'], ['asc', 'desc'])? $condition['sort_type'] : 'desc';

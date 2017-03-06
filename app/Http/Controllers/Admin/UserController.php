@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Business\RoleBusiness;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use App\Exceptions\JsonException;
@@ -33,13 +34,17 @@ class UserController extends Controller
     }
 
     /**
-     * @author:     ouhanrong
-     * 功能：添加用户
+     * 功能：添加用户页面
+     * author: ouhanrong
+     * @param RoleBusiness $role_business
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create()
+    public function create(RoleBusiness $role_business)
     {
-        return view('admin.user.create');
+        //获取用户角色
+        $role_data = $role_business->getRoleList(['all' => 1, 'is_disable' => 0, 'sort_column' => 'id', 'sort_type' => 'asc'], ['id','role_name'], []);
+
+        return view('admin.user.create', ['role_data' => $role_data]);
     }
 
 
@@ -68,11 +73,19 @@ class UserController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws JsonException
      */
-    public function edit($id, UsersBusiness $users_business)
+    public function edit($id, UsersBusiness $users_business, RoleBusiness $role_business)
     {
-        $data = $users_business->getUserDetails($id, ['id','username','sex','email']);
+        //获取用户角色
+        $role_data = $role_business->getRoleList(['all' => 1, 'is_disable' => 0, 'sort_column' => 'id', 'sort_type' => 'asc'], ['id','role_name'], []);
+        //获取用户角色
+        $user_data = $users_business->getUserDetails($id, ['id', 'role_id','username','sex','email']);
 
-        return view('admin.user.edit', ['user' => $data]);
+        $data = [
+            'role_data' => $role_data,
+            'user_data' => $user_data
+        ];
+
+        return view('admin.user.edit', ['data' => $data]);
     }
 
     /**

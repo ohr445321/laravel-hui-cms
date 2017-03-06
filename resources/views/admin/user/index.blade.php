@@ -22,6 +22,7 @@
                         <th>用户名</th>
                         <th>性别</th>
                         <th>邮箱</th>
+                        <th>角色</th>
                         <th>用户状态</th>
                         <th>创建时间</th>
                         <th>操作</th>
@@ -36,6 +37,7 @@
                                 <td>{{ $value->username }}</td>
                                 <td>{{ $value->sex }}</td>
                                 <td>{{ $value->email }}</td>
+                                <td>{{ $value->role_name }}</td>
                                 <td>
                                     @if($value->is_disable == 0)
                                         <span class="label label-success radius">已启用</span>

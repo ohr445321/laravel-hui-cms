@@ -186,6 +186,7 @@ class UsersDao extends DaoBase
             'user_name' => ['required'],
             'sex' => 'required',
             'email' => 'email',
+            'role_id' => ['required', 'int']
         ]);
         if ($validator->fails()) {
             throw new JsonException(10000, $validator->messages());
@@ -196,6 +197,7 @@ class UsersDao extends DaoBase
         $users_model->username = $data['user_name'];
         $users_model->sex = $data['sex'];
         $users_model->email = empty($data['email']) ? '' : $data['email'];
+        $users_model->role_id = empty($data['role_id']) ? 0 : $data['role_id'];
 
         if (!$users_model->save()) {
             throw new JsonException(10004);
@@ -219,6 +221,7 @@ class UsersDao extends DaoBase
             'salt' => 'required',
             'sex' => 'required',
             'email' => 'email',
+            'role_id' => ['required', 'int']
         ]);
         if ($validator->fails()) {
             throw new JsonException(10000, $validator->messages());
@@ -231,6 +234,7 @@ class UsersDao extends DaoBase
         $users_model->salt = $data['salt'];
         $users_model->sex = $data['sex'];
         $users_model->email = empty($data['email']) ? '' : $data['email'];
+        $users_model->role_id = empty($data['role_id']) ? 0 : $data['role_id'];
         $users_model->create_time = date('YmdHis');
 
         if (!$users_model->save()) {
